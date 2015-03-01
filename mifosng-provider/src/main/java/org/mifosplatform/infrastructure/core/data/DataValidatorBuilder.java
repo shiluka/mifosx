@@ -206,6 +206,102 @@ public class DataValidatorBuilder {
         }
         return this;
     }
+    
+    public DataValidatorBuilder inMinMaxCharacterRange(final Integer minLength,final Integer maxLength) {
+        if (this.value == null && this.ignoreNullValue) { return this; }
+        
+        if (this.value != null){
+            final int length = this.value.toString().trim().length();
+            
+            if(length < minLength || length > maxLength){
+                final StringBuilder validationErrorCode = new StringBuilder("validation.msg.").append(this.resource).append(".")
+                        .append(this.parameter).append(".not.in.min.max.range");
+                final StringBuilder defaultEnglishMessage = new StringBuilder("The parameter ").append(this.parameter)
+                        .append(" not in min max range of ").append(minLength).append(".");
+                final ApiParameterError error = ApiParameterError.parameterError(validationErrorCode.toString(),
+                        defaultEnglishMessage.toString(), this.parameter, minLength, maxLength, this.value.toString());
+                this.dataValidationErrors.add(error);
+            }
+            
+        }
+        return this;
+    }
+    
+    public DataValidatorBuilder hasUpperCaseLetter(){
+        
+        if (this.value == null && this.ignoreNullValue) { return this; }
+        
+        final Pattern hasUpperCase = Pattern.compile("[A-Z]");
+        
+        if ((this.value != null) && !(hasUpperCase.matcher(this.value.toString()).find())) {
+            final StringBuilder validationErrorCode = new StringBuilder("validation.msg.").append(this.resource).append(".")
+                    .append(this.parameter).append(".required.uppercase.letter");
+            final StringBuilder defaultEnglishMessage = new StringBuilder("The parameter ").append(this.parameter)
+                    .append(" required uppercase letter ").append(".");
+            final ApiParameterError error = ApiParameterError.parameterError(validationErrorCode.toString(),
+                    defaultEnglishMessage.toString(), this.parameter, this.value.toString());
+            this.dataValidationErrors.add(error);
+        }
+        
+        return this;
+    }
+    
+    public DataValidatorBuilder hasLowerCaseLetter(){
+        
+        if (this.value == null && this.ignoreNullValue) { return this; }
+        
+        final Pattern hasLowerCase = Pattern.compile("[a-z]");
+        
+        if ((this.value != null) && !(hasLowerCase.matcher(this.value.toString()).find())) {
+            final StringBuilder validationErrorCode = new StringBuilder("validation.msg.").append(this.resource).append(".")
+                    .append(this.parameter).append(".required.lowercase.letter");
+            final StringBuilder defaultEnglishMessage = new StringBuilder("The parameter ").append(this.parameter)
+                    .append(" required lowercase letter ").append(".");
+            final ApiParameterError error = ApiParameterError.parameterError(validationErrorCode.toString(),
+                    defaultEnglishMessage.toString(), this.parameter, this.value.toString());
+            this.dataValidationErrors.add(error);
+        }
+        
+        return this;
+    }
+    
+    public DataValidatorBuilder hasNumber(){
+        
+        if (this.value == null && this.ignoreNullValue) { return this; }
+        
+        final Pattern hasNumber = Pattern.compile("\\d");
+        
+        if ((this.value != null) && !(hasNumber.matcher(this.value.toString()).find())) {
+            final StringBuilder validationErrorCode = new StringBuilder("validation.msg.").append(this.resource).append(".")
+                    .append(this.parameter).append(".required.number");
+            final StringBuilder defaultEnglishMessage = new StringBuilder("The parameter ").append(this.parameter)
+                    .append(" required number ").append(".");
+            final ApiParameterError error = ApiParameterError.parameterError(validationErrorCode.toString(),
+                    defaultEnglishMessage.toString(), this.parameter, this.value.toString());
+            this.dataValidationErrors.add(error);
+        }
+        
+        return this;
+    }
+    
+    public DataValidatorBuilder hasSpecialCharacter(){
+        
+        if (this.value == null && this.ignoreNullValue) { return this; }
+        
+        final Pattern hasSpecialCharacter = Pattern.compile("[\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\_\\+\\-\\=\\[\\]\\{\\}\\|\\']");
+        
+        if ((this.value != null) && !(hasSpecialCharacter.matcher(this.value.toString()).find())) {
+            final StringBuilder validationErrorCode = new StringBuilder("validation.msg.").append(this.resource).append(".")
+                    .append(this.parameter).append(".required.special.character");
+            final StringBuilder defaultEnglishMessage = new StringBuilder("The parameter ").append(this.parameter)
+                    .append(" required special character ").append(".");
+            final ApiParameterError error = ApiParameterError.parameterError(validationErrorCode.toString(),
+                    defaultEnglishMessage.toString(), this.parameter, this.value.toString());
+            this.dataValidationErrors.add(error);
+        }
+        
+        return this;
+    }
 
     public DataValidatorBuilder inMinMaxRange(final Integer min, final Integer max) {
         if (this.value == null && this.ignoreNullValue) { return this; }

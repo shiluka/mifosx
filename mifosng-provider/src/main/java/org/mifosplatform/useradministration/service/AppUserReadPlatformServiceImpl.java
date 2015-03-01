@@ -39,6 +39,11 @@ public class AppUserReadPlatformServiceImpl implements AppUserReadPlatformServic
     private final RoleReadPlatformService roleReadPlatformService;
     private final AppUserRepository appUserRepository;
     private final StaffReadPlatformService staffReadPlatformService;
+    
+    /*
+     * used for get logged-in user.
+     */
+    private static PlatformSecurityContext platFormSecurityContext;
 
     @Autowired
     public AppUserReadPlatformServiceImpl(final PlatformSecurityContext context, final RoutingDataSource dataSource,
@@ -50,6 +55,7 @@ public class AppUserReadPlatformServiceImpl implements AppUserReadPlatformServic
         this.appUserRepository = appUserRepository;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.staffReadPlatformService = staffReadPlatformService;
+        this.platFormSecurityContext = context;
     }
 
     /*
@@ -57,6 +63,10 @@ public class AppUserReadPlatformServiceImpl implements AppUserReadPlatformServic
      */
     public PlatformSecurityContext getContext() {
         return this.context;
+    }
+    
+    public static AppUser getLoggedInUser(){
+        return platFormSecurityContext.authenticatedUser();
     }
 
     @Override

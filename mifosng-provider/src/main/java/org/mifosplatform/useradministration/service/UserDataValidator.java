@@ -31,11 +31,11 @@ public final class UserDataValidator {
     /**
      * The parameters supported for this command.
      */
-    private final Set<String> supportedParameters = new HashSet<>(Arrays.asList("username", "firstname", "lastname", "password",
+    private final Set<String> supportedParameters = new HashSet<>(Arrays.asList("username", "firstname", "lastname", "currentPassword", "password",
             "repeatPassword", "email", "officeId", "notSelectedRoles", "roles", "sendPasswordToEmail", "staffId"));
 
     private final FromJsonHelper fromApiJsonHelper;
-
+    
     @Autowired
     public UserDataValidator(final FromJsonHelper fromApiJsonHelper) {
         this.fromApiJsonHelper = fromApiJsonHelper;
@@ -69,7 +69,7 @@ public final class UserDataValidator {
             } else {
                 final String password = this.fromApiJsonHelper.extractStringNamed("password", element);
                 final String repeatPassword = this.fromApiJsonHelper.extractStringNamed("repeatPassword", element);
-                baseDataValidator.reset().parameter("password").value(password).notBlank().notExceedingLengthOf(50);
+                baseDataValidator.reset().parameter("password").value(password).notBlank().inMinMaxCharacterRange(6,128).hasLowerCaseLetter().hasUpperCaseLetter().hasNumber().hasSpecialCharacter();
                 if (StringUtils.isNotBlank(password)) {
                     baseDataValidator.reset().parameter("password").value(password).equalToParameter("repeatPassword", repeatPassword);
                 }
@@ -145,7 +145,7 @@ public final class UserDataValidator {
         if (this.fromApiJsonHelper.parameterExists("password", element)) {
             final String password = this.fromApiJsonHelper.extractStringNamed("password", element);
             final String repeatPassword = this.fromApiJsonHelper.extractStringNamed("repeatPassword", element);
-            baseDataValidator.reset().parameter("password").value(password).notBlank().notExceedingLengthOf(50);
+            baseDataValidator.reset().parameter("password").value(password).notBlank().inMinMaxCharacterRange(6,128).hasLowerCaseLetter().hasUpperCaseLetter().hasNumber().hasSpecialCharacter();
             if (StringUtils.isNotBlank(password)) {
                 baseDataValidator.reset().parameter("password").value(password).equalToParameter("repeatPassword", repeatPassword);
             }
